@@ -1,0 +1,43 @@
+schema: spec-driven
+
+context: |
+  Language: ru
+  All artifacts must be written in ru.
+  Keep OpenSpec structural headings and SHALL/MUST keywords in English.
+
+  Проект: тестовое задание — мини-CRM «Объекты и задачи» для строительной компании
+  (роли: постановщик и исполнитель; объекты; задачи с циклом статусов и историей).
+  Исходный черновик плана: PLAN.md в корне репозитория.
+
+  Общие правила:
+  - Код должен быть читаемым.
+  - Фронтенд: архитектура FSD (app, pages, widgets, features, entities, shared;
+    импорты только вниз по слоям).
+  - Бэкенд: DDD (domain, application, infrastructure, presentation).
+  - БД и аутентификация: Supabase (миграции в supabase/migrations, RLS обязателен,
+    service_role не попадает во фронтенд и в репозиторий).
+  - Коммиты и описания PR пишутся на русском.
+  - История коммитов ведётся по docs/COMMITS.md: один коммит — одна законченная идея,
+    код + тесты + галочка в tasks.md в одном коммите, каждый коммит рабочий.
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always state what is out of scope
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing
