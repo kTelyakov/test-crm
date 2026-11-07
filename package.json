@@ -12,7 +12,9 @@
     "format:check": "prettier --check .",
     "typecheck": "pnpm -r --if-present typecheck",
     "db:reset": "supabase db reset",
-    "db:seed:users": "node --env-file=.env supabase/seed/users.mjs"
+    "db:seed:users": "node --env-file=.env supabase/seed/users.mjs",
+    "db:seed:demo": "node --env-file=.env supabase/seed/demo-data.mjs",
+    "db:seed": "pnpm db:seed:users && pnpm db:seed:demo"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
