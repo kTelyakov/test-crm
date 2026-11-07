@@ -2,7 +2,7 @@
 
 ## 1. Каркас репозитория и схема БД
 
-- [ ] 1.1 Создать pnpm-монорепозиторий (`frontend/`, `backend/`, `e2e/`, `supabase/`, `docs/`), `.gitignore`, `.env.example` для каждого приложения, общие ESLint/Prettier/tsconfig; проверка: `pnpm install` проходит, `.env` в `.gitignore`
+- [x] 1.1 Создать pnpm-монорепозиторий (`frontend/`, `backend/`, `e2e/`, `supabase/`, `docs/`), `.gitignore`, `.env.example` для каждого приложения, общие ESLint/Prettier/tsconfig; проверка: `pnpm install` проходит, `.env` в `.gitignore`
 - [ ] 1.2 Миграция: enum-ы статуса и роли, таблицы `profiles`, `sites`, `tasks`, `task_status_history`, ограничения (`restrict` для объекта с задачами, автор и дата по умолчанию); проверка: `supabase db reset` проходит без ошибок
 - [ ] 1.3 Миграция: таблица `task_transitions` с правилами из ТЗ; проверка: запрос возвращает ровно 5 правил
 

@@ -1,0 +1,22 @@
+{
+  "name": "test-crm",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.12.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "pnpm -r --if-present typecheck"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.14.0",
+    "prettier": "^3.9.10",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.1"
+  }
+}

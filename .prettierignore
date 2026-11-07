@@ -1,0 +1,8 @@
+node_modules
+dist
+pnpm-lock.yaml
+openspec
+.claude
+docs
+PLAN.md
+**/generated
