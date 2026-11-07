@@ -149,14 +149,12 @@ test.describe('Правила переходов: доступ (спек task-wo
     const m = await clientFor(manager);
 
     const { data } = await m.from('task_transitions').select('*');
-    const inserted = await m
-      .from('task_transitions')
-      .insert({
-        from_status: 'new',
-        to_status: 'done',
-        actor_role: 'manager',
-        requires_assignee: false,
-      });
+    const inserted = await m.from('task_transitions').insert({
+      from_status: 'new',
+      to_status: 'done',
+      actor_role: 'manager',
+      requires_assignee: false,
+    });
 
     expect(data).toHaveLength(5);
     expect(inserted.error).not.toBeNull();
