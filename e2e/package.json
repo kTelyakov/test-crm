@@ -2,5 +2,14 @@
   "name": "@test-crm/e2e",
   "private": true,
   "version": "0.0.0",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "^1.65.0",
+    "@supabase/supabase-js": "^2.119.0",
+    "@types/node": "^26.6.6"
+  },
+  "scripts": {
+    "typecheck": "tsc -p .",
+    "test:e2e": "pnpm -w db:reset && pnpm -w db:seed:users && playwright test"
+  }
 }
