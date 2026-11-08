@@ -1,4 +1,21 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { AppLayout } from '@/app/layouts/AppLayout';
 import { LoginPage } from '@/pages/login';
+import { SitesPage } from '@/pages/sites';
+import { RedirectIfAuthenticated, RequireAuth } from './guards';
 
-export const router = createBrowserRouter([{ path: '/login', element: <LoginPage /> }]);
+export const router = createBrowserRouter([
+  { element: <RedirectIfAuthenticated />, children: [{ path: '/login', element: <LoginPage /> }] },
+  {
+    element: <RequireAuth />,
+    children: [
+      {
+        element: <AppLayout />,
+        children: [
+          { index: true, element: <Navigate to="/sites" replace /> },
+          { path: '/sites', element: <SitesPage /> },
+        ],
+      },
+    ],
+  },
+]);
