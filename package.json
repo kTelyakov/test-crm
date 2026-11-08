@@ -14,7 +14,14 @@
     "db:reset": "supabase db reset",
     "db:seed:users": "node --env-file=.env supabase/seed/users.mjs",
     "db:seed:demo": "node --env-file=.env supabase/seed/demo-data.mjs",
-    "db:seed": "pnpm db:seed:users && pnpm db:seed:demo"
+    "db:seed": "pnpm db:seed:users && pnpm db:seed:demo",
+    "dev:backend": "pnpm --filter @test-crm/backend dev",
+    "dev:frontend": "pnpm --filter @test-crm/frontend dev",
+    "api:generate": "pnpm --filter @test-crm/backend openapi:generate && pnpm --filter @test-crm/frontend api:generate",
+    "fsd:check": "pnpm --filter @test-crm/frontend fsd:check",
+    "test:unit": "pnpm --filter @test-crm/backend test",
+    "test:e2e": "pnpm --filter @test-crm/e2e test:e2e",
+    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm fsd:check && pnpm test:unit"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

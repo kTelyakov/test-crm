@@ -1,0 +1,19 @@
+# Описание сервиса бэкенда для Render (Blueprint). Секреты здесь не хранятся:
+# значения с `sync: false` вводятся в панели Render.
+services:
+  - type: web
+    name: mini-crm-backend
+    runtime: node
+    plan: free
+    buildCommand: corepack enable && pnpm install --frozen-lockfile --filter @test-crm/backend...
+    startCommand: pnpm --filter @test-crm/backend start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: FRONTEND_ORIGIN
+        sync: false
