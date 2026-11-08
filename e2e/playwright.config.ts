@@ -13,4 +13,12 @@ export default defineConfig({
   fullyParallel: false,
   workers: 1,
   reporter: [['list']],
+  webServer: {
+    // Бэкенд запускается из своей папки, чтобы подхватить tsx без вложенного вызова pnpm.
+    command: 'node --import tsx src/server.ts',
+    cwd: '../backend',
+    url: 'http://localhost:3100/health',
+    env: { PORT: '3100', NODE_ENV: 'test' },
+    reuseExistingServer: !process.env['CI'],
+  },
 });

@@ -17,10 +17,14 @@ const STATUS_BY_CODE: Record<DomainErrorCode, number> = {
 /** Единый формат ошибок API: `{ code, message }`. */
 export function errorHandler(error: FastifyError, request: FastifyRequest, reply: FastifyReply) {
   if (error instanceof DomainError) {
-    return reply.status(STATUS_BY_CODE[error.code]).send({ code: error.code, message: error.message });
+    return reply
+      .status(STATUS_BY_CODE[error.code])
+      .send({ code: error.code, message: error.message });
   }
   if (hasZodFastifySchemaValidationErrors(error)) {
-    return reply.status(400).send({ code: 'validation_failed', message: 'Некорректные данные запроса' });
+    return reply
+      .status(400)
+      .send({ code: 'validation_failed', message: 'Некорректные данные запроса' });
   }
   request.log.error(error);
   return reply.status(500).send({ code: 'internal_error', message: 'Внутренняя ошибка сервера' });

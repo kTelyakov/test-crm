@@ -11,4 +11,5 @@ export const env = {
   supabaseUrl: requireEnv('SUPABASE_URL'),
   supabaseAnonKey: requireEnv('SUPABASE_ANON_KEY'),
   testUserPassword: requireEnv('TEST_USER_PASSWORD'),
+  backendUrl: process.env['BACKEND_URL'] ?? 'http://localhost:3100',
 };
