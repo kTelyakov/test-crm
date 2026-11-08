@@ -1,5 +1,9 @@
+import { NavLink } from 'react-router-dom';
 import { ROLE_LABEL, useSessionStore } from '@/entities/user';
 import { LogoutButton } from '@/features/auth-logout';
+
+const navClass = ({ isActive }: { isActive: boolean }) =>
+  isActive ? 'font-semibold text-blue-700' : 'text-slate-700 hover:text-blue-700';
 
 export function AppHeader() {
   const user = useSessionStore((state) => state.user);
@@ -8,7 +12,16 @@ export function AppHeader() {
   return (
     <header className="border-b border-slate-200 bg-white">
       <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-4 py-3">
-        <span className="font-semibold">Объекты и задачи</span>
+        <nav className="flex items-center gap-4" aria-label="Разделы">
+          <NavLink to="/sites" className={navClass}>
+            Объекты
+          </NavLink>
+          {user.role === 'executor' && (
+            <NavLink to="/my-tasks" className={navClass}>
+              Мои задачи
+            </NavLink>
+          )}
+        </nav>
         <div className="flex items-center gap-3 text-sm">
           <span>
             {user.fullName}
