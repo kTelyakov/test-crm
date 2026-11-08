@@ -12,6 +12,7 @@
   },
   "scripts": {
     "typecheck": "tsc -p .",
+    "test:deployed": "playwright test -c playwright.deployed.config.ts",
     "test:e2e": "pnpm -w db:reset && pnpm -w db:seed:users && playwright test"
   }
 }
