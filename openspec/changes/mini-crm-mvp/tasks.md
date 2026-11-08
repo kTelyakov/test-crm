@@ -22,7 +22,7 @@
 
 - [x] 4.1 Каркас Fastify, конфигурация из окружения, `fastify-type-provider-zod` и `@fastify/swagger`, скрипт `openapi:generate`, обработчик доменных ошибок → HTTP-коды; проверка: `GET /health` отвечает 200, `backend/openapi.json` генерируется
 - [x] 4.2 Модуль `identity`: проверка токена, клиент Supabase под токеном пользователя, профиль и роль; проверка: Playwright-тесты спека `auth` (запрос без токена, подмена идентичности)
-- [ ] 4.3 Домен `tasks`: `TaskStatus`, `TaskAction`, `TransitionRule`, `availableActions`, чтение правил из БД; проверка: Vitest-тесты по сценариям «Доступные действия в интерфейсе»
+- [x] 4.3 Домен `tasks`: `TaskStatus`, `TaskAction`, `TransitionRule`, `availableActions`, чтение правил из БД; проверка: Vitest-тесты по сценариям «Доступные действия в интерфейсе»
 - [ ] 4.4 Модуль `sites`: use cases, репозиторий, маршруты, DTO; проверка: Playwright API-тесты сценариев спека `sites`
 - [ ] 4.5 Модуль `tasks`: CRUD, список, «Мои задачи», карточка с историей и `availableActions`; проверка: Playwright API-тесты сценариев спека `tasks`
 - [ ] 4.6 Use case `ChangeTaskStatus`: вызов функции БД, маппинг ошибок БД в доменные; проверка: Playwright API-тесты спека `task-workflow` через бэкенд
