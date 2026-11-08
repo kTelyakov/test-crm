@@ -21,7 +21,8 @@
     "fsd:check": "pnpm --filter @test-crm/frontend fsd:check",
     "test:unit": "pnpm --filter @test-crm/backend test",
     "test:e2e": "pnpm --filter @test-crm/e2e test:e2e",
-    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm fsd:check && pnpm test:unit"
+    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm fsd:check && pnpm test:unit",
+    "check:secrets": "node scripts/check-secrets.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

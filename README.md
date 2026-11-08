@@ -58,6 +58,7 @@ pnpm dev:frontend                   # http://localhost:5173
 pnpm test:unit    # Vitest: расчёт доступных действий
 pnpm test:e2e     # Playwright: сброс БД, сид пользователей и 126 сценариев
 pnpm check        # линтер, формат, типы, границы FSD, unit-тесты
+pnpm check:secrets  # нет ли ключей в репозитории и в сборке фронтенда (после pnpm --filter @test-crm/frontend build)
 ```
 
 `pnpm test:e2e` сам поднимает бэкенд (порт 3100) и фронтенд (порт 5173). UI-тесты идут в установленном Google Chrome (`playwright install chrome`, если его нет). Тесты названы по сценариям из `openspec/changes/mini-crm-mvp/specs/`.
