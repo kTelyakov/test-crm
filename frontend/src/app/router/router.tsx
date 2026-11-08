@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { AppLayout } from '@/app/layouts/AppLayout';
 import { LoginPage } from '@/pages/login';
 import { SiteDetailsPage } from '@/pages/site-details';
+import { TaskDetailsPage } from '@/pages/task-details';
 import { SitesPage } from '@/pages/sites';
 import { RedirectIfAuthenticated, RequireAuth } from './guards';
 
@@ -16,6 +17,7 @@ export const router = createBrowserRouter([
           { index: true, element: <Navigate to="/sites" replace /> },
           { path: '/sites', element: <SitesPage /> },
           { path: '/sites/:siteId', element: <SiteDetailsPage /> },
+          { path: '/tasks/:taskId', element: <TaskDetailsPage /> },
         ],
       },
     ],

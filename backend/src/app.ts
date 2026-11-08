@@ -27,7 +27,11 @@ export async function buildApp(config: Config) {
   app.setSerializerCompiler(serializerCompiler);
   app.setErrorHandler(errorHandler);
 
-  await app.register(cors, { origin: config.FRONTEND_ORIGIN.split(',') });
+  await app.register(cors, {
+    origin: config.FRONTEND_ORIGIN.split(','),
+    // По умолчанию разрешены только GET, HEAD и POST — без PATCH и DELETE браузер блокирует запросы фронтенда.
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  });
   await app.register(swagger, {
     openapi: {
       info: { title: 'Мини-CRM «Объекты и задачи»', version: '1.0.0' },
