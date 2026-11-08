@@ -37,6 +37,7 @@
     "build": "tsc -p . && vite build",
     "preview": "vite preview",
     "typecheck": "tsc -p .",
+    "api:generate": "orval --config orval.config.ts",
     "fsd:check": "steiger ./src"
   }
 }
