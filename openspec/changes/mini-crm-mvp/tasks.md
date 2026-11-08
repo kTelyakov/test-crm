@@ -25,7 +25,7 @@
 - [x] 4.3 Домен `tasks`: `TaskStatus`, `TaskAction`, `TransitionRule`, `availableActions`, чтение правил из БД; проверка: Vitest-тесты по сценариям «Доступные действия в интерфейсе»
 - [x] 4.4 Модуль `sites`: use cases, репозиторий, маршруты, DTO; проверка: Playwright API-тесты сценариев спека `sites`
 - [x] 4.5 Модуль `tasks`: CRUD, список, «Мои задачи», карточка с историей и `availableActions`; проверка: Playwright API-тесты сценариев спека `tasks`
-- [ ] 4.6 Use case `ChangeTaskStatus`: вызов функции БД, маппинг ошибок БД в доменные; проверка: Playwright API-тесты спека `task-workflow` через бэкенд
+- [x] 4.6 Use case `ChangeTaskStatus`: вызов функции БД, маппинг ошибок БД в доменные; проверка: Playwright API-тесты спека `task-workflow` через бэкенд
 
 ## 5. Фронтенд (FSD)
 

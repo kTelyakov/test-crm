@@ -3,6 +3,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import { errorResponseSchema } from '../../../shared/error-schema';
 import { siteIdParamsSchema } from '../../sites/presentation/dto';
+import { ChangeTaskStatus } from '../application/change-task-status';
 import { TaskCardAssembler } from '../application/task-card';
 import {
   CreateTask,
@@ -15,6 +16,7 @@ import {
 import { SupabaseTaskRepository } from '../infrastructure/supabase-task-repository';
 import { SupabaseTransitionRuleRepository } from '../infrastructure/supabase-transition-rule-repository';
 import {
+  changeStatusBodySchema,
   createTaskBodySchema,
   taskCardSchema,
   taskIdParamsSchema,
@@ -143,6 +145,33 @@ export async function tasksRoutes(app: FastifyInstance) {
       const { tasks } = dependencies(request);
       await new DeleteTask(tasks).execute(request.params.id);
       return reply.status(204).send(null);
+    },
+  );
+
+  api.post(
+    '/tasks/:id/status',
+    {
+      schema: {
+        ...secured,
+        summary: 'Сменить статус задачи (правила проверяет база данных)',
+        params: taskIdParamsSchema,
+        body: changeStatusBodySchema,
+        response: {
+          200: taskCardSchema,
+          409: errorResponseSchema,
+          422: errorResponseSchema,
+          ...notFound,
+          ...errors,
+        },
+      },
+    },
+    async (request) => {
+      const { tasks, cards, user } = dependencies(request);
+      const card = await new ChangeTaskStatus(tasks, cards).execute(
+        { taskId: request.params.id, ...request.body },
+        user,
+      );
+      return toTaskCardDto(card);
     },
   );
 }
