@@ -12,11 +12,650 @@
         "bearerFormat": "JWT"
       }
     },
-    "schemas": {}
+    "schemas": {
+      "ErrorResponseInput": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": ["code", "message"]
+      },
+      "UserInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["manager", "executor"]
+          }
+        },
+        "required": ["id", "fullName", "role"]
+      },
+      "SiteInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "name", "address", "createdAt"]
+      },
+      "CreateSiteBodyInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "address": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": ["name", "address"]
+      },
+      "UpdateSiteBodyInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "address": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "TaskStatusInput": {
+        "type": "string",
+        "enum": ["new", "in_progress", "review", "done", "rework"]
+      },
+      "TaskInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "siteId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TaskStatusInput"
+          },
+          "assignee": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "fullName": {
+                "type": "string"
+              }
+            },
+            "required": ["id", "fullName"]
+          },
+          "createdBy": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "siteId",
+          "title",
+          "description",
+          "status",
+          "assignee",
+          "createdBy",
+          "createdAt"
+        ]
+      },
+      "TaskActionInput": {
+        "type": "object",
+        "properties": {
+          "toStatus": {
+            "$ref": "#/components/schemas/TaskStatusInput"
+          },
+          "requiresComment": {
+            "type": "boolean"
+          }
+        },
+        "required": ["toStatus", "requiresComment"]
+      },
+      "TaskHistoryEntryInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "fromStatus": {
+            "$ref": "#/components/schemas/TaskStatusInput"
+          },
+          "toStatus": {
+            "$ref": "#/components/schemas/TaskStatusInput"
+          },
+          "changedBy": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "fullName": {
+                "type": "string"
+              }
+            },
+            "required": ["id", "fullName"]
+          },
+          "comment": {
+            "nullable": true,
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "fromStatus", "toStatus", "changedBy", "comment", "createdAt"]
+      },
+      "TaskCardInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "siteId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TaskStatusInput"
+          },
+          "assignee": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "fullName": {
+                "type": "string"
+              }
+            },
+            "required": ["id", "fullName"]
+          },
+          "createdBy": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "availableActions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TaskActionInput"
+            }
+          },
+          "history": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TaskHistoryEntryInput"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "siteId",
+          "title",
+          "description",
+          "status",
+          "assignee",
+          "createdBy",
+          "createdAt",
+          "availableActions",
+          "history"
+        ]
+      },
+      "CreateTaskBodyInput": {
+        "type": "object",
+        "properties": {
+          "siteId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "default": "",
+            "type": "string"
+          },
+          "assigneeId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          }
+        },
+        "required": ["siteId", "title", "assigneeId"]
+      },
+      "UpdateTaskBodyInput": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string"
+          },
+          "assigneeId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          }
+        }
+      },
+      "ChangeStatusBodyInput": {
+        "type": "object",
+        "properties": {
+          "toStatus": {
+            "$ref": "#/components/schemas/TaskStatusInput"
+          },
+          "comment": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": ["toStatus"]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": ["code", "message"],
+        "additionalProperties": false
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["manager", "executor"]
+          }
+        },
+        "required": ["id", "fullName", "role"],
+        "additionalProperties": false
+      },
+      "Site": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "name", "address", "createdAt"],
+        "additionalProperties": false
+      },
+      "CreateSiteBody": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "address": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": ["name", "address"],
+        "additionalProperties": false
+      },
+      "UpdateSiteBody": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "address": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "TaskStatus": {
+        "type": "string",
+        "enum": ["new", "in_progress", "review", "done", "rework"]
+      },
+      "Task": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "siteId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TaskStatus"
+          },
+          "assignee": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "fullName": {
+                "type": "string"
+              }
+            },
+            "required": ["id", "fullName"],
+            "additionalProperties": false
+          },
+          "createdBy": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "siteId",
+          "title",
+          "description",
+          "status",
+          "assignee",
+          "createdBy",
+          "createdAt"
+        ],
+        "additionalProperties": false
+      },
+      "TaskAction": {
+        "type": "object",
+        "properties": {
+          "toStatus": {
+            "$ref": "#/components/schemas/TaskStatus"
+          },
+          "requiresComment": {
+            "type": "boolean"
+          }
+        },
+        "required": ["toStatus", "requiresComment"],
+        "additionalProperties": false
+      },
+      "TaskHistoryEntry": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "fromStatus": {
+            "$ref": "#/components/schemas/TaskStatus"
+          },
+          "toStatus": {
+            "$ref": "#/components/schemas/TaskStatus"
+          },
+          "changedBy": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "fullName": {
+                "type": "string"
+              }
+            },
+            "required": ["id", "fullName"],
+            "additionalProperties": false
+          },
+          "comment": {
+            "nullable": true,
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "fromStatus", "toStatus", "changedBy", "comment", "createdAt"],
+        "additionalProperties": false
+      },
+      "TaskCard": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "siteId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TaskStatus"
+          },
+          "assignee": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "fullName": {
+                "type": "string"
+              }
+            },
+            "required": ["id", "fullName"],
+            "additionalProperties": false
+          },
+          "createdBy": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "availableActions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TaskAction"
+            }
+          },
+          "history": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TaskHistoryEntry"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "siteId",
+          "title",
+          "description",
+          "status",
+          "assignee",
+          "createdBy",
+          "createdAt",
+          "availableActions",
+          "history"
+        ],
+        "additionalProperties": false
+      },
+      "CreateTaskBody": {
+        "type": "object",
+        "properties": {
+          "siteId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "default": "",
+            "type": "string"
+          },
+          "assigneeId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          }
+        },
+        "required": ["siteId", "title", "description", "assigneeId"],
+        "additionalProperties": false
+      },
+      "UpdateTaskBody": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string"
+          },
+          "assigneeId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ChangeStatusBody": {
+        "type": "object",
+        "properties": {
+          "toStatus": {
+            "$ref": "#/components/schemas/TaskStatus"
+          },
+          "comment": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": ["toStatus"],
+        "additionalProperties": false
+      }
+    }
   },
   "paths": {
     "/health": {
       "get": {
+        "operationId": "getHealth",
         "responses": {
           "200": {
             "description": "Default Response",
@@ -41,6 +680,7 @@
     },
     "/me": {
       "get": {
+        "operationId": "getMe",
         "summary": "Текущий пользователь и его роль",
         "tags": ["identity"],
         "security": [
@@ -54,23 +694,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "fullName": {
-                      "type": "string"
-                    },
-                    "role": {
-                      "type": "string",
-                      "enum": ["manager", "executor"]
-                    }
-                  },
-                  "required": ["id", "fullName", "role"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
@@ -80,17 +704,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -100,6 +714,7 @@
     },
     "/executors": {
       "get": {
+        "operationId": "listExecutors",
         "summary": "Исполнители, которых можно назначить на задачу",
         "tags": ["identity"],
         "security": [
@@ -115,23 +730,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "format": "uuid",
-                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                      },
-                      "fullName": {
-                        "type": "string"
-                      },
-                      "role": {
-                        "type": "string",
-                        "enum": ["manager", "executor"]
-                      }
-                    },
-                    "required": ["id", "fullName", "role"],
-                    "additionalProperties": false
+                    "$ref": "#/components/schemas/User"
                   }
                 }
               }
@@ -142,17 +741,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -162,6 +751,7 @@
     },
     "/sites": {
       "get": {
+        "operationId": "listSites",
         "summary": "Список объектов (исполнитель видит только свои)",
         "tags": ["sites"],
         "security": [
@@ -177,25 +767,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "format": "uuid",
-                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "address": {
-                        "type": "string"
-                      },
-                      "createdAt": {
-                        "type": "string"
-                      }
-                    },
-                    "required": ["id", "name", "address", "createdAt"],
-                    "additionalProperties": false
+                    "$ref": "#/components/schemas/Site"
                   }
                 }
               }
@@ -206,17 +778,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -226,17 +788,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -246,17 +798,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -264,6 +806,7 @@
         }
       },
       "post": {
+        "operationId": "createSite",
         "summary": "Создать объект (постановщик)",
         "tags": ["sites"],
         "requestBody": {
@@ -271,18 +814,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "address": {
-                    "type": "string",
-                    "minLength": 1
-                  }
-                },
-                "required": ["name", "address"]
+                "$ref": "#/components/schemas/CreateSiteBodyInput"
               }
             }
           }
@@ -298,25 +830,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "address": {
-                      "type": "string"
-                    },
-                    "createdAt": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["id", "name", "address", "createdAt"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/Site"
                 }
               }
             }
@@ -326,17 +840,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -346,17 +850,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -366,17 +860,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -386,6 +870,7 @@
     },
     "/sites/{id}": {
       "get": {
+        "operationId": "getSite",
         "summary": "Карточка объекта",
         "tags": ["sites"],
         "parameters": [
@@ -411,25 +896,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "address": {
-                      "type": "string"
-                    },
-                    "createdAt": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["id", "name", "address", "createdAt"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/Site"
                 }
               }
             }
@@ -439,17 +906,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -459,17 +916,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -479,17 +926,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -499,17 +936,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -517,6 +944,7 @@
         }
       },
       "patch": {
+        "operationId": "updateSite",
         "summary": "Изменить объект (постановщик)",
         "tags": ["sites"],
         "requestBody": {
@@ -524,17 +952,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "address": {
-                    "type": "string",
-                    "minLength": 1
-                  }
-                }
+                "$ref": "#/components/schemas/UpdateSiteBodyInput"
               }
             }
           }
@@ -562,25 +980,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "address": {
-                      "type": "string"
-                    },
-                    "createdAt": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["id", "name", "address", "createdAt"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/Site"
                 }
               }
             }
@@ -590,17 +990,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -610,17 +1000,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -630,17 +1010,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -650,17 +1020,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -668,6 +1028,7 @@
         }
       },
       "delete": {
+        "operationId": "deleteSite",
         "summary": "Удалить объект без задач (постановщик)",
         "tags": ["sites"],
         "parameters": [
@@ -705,17 +1066,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -725,17 +1076,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -745,17 +1086,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -765,17 +1096,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -785,17 +1106,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -805,6 +1116,7 @@
     },
     "/sites/{id}/tasks": {
       "get": {
+        "operationId": "listSiteTasks",
         "summary": "Задачи объекта (исполнитель видит только свои)",
         "tags": ["tasks"],
         "parameters": [
@@ -832,63 +1144,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "format": "uuid",
-                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                      },
-                      "siteId": {
-                        "type": "string",
-                        "format": "uuid",
-                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                      },
-                      "title": {
-                        "type": "string"
-                      },
-                      "description": {
-                        "type": "string"
-                      },
-                      "status": {
-                        "type": "string",
-                        "enum": ["new", "in_progress", "review", "done", "rework"]
-                      },
-                      "assignee": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "format": "uuid",
-                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                          },
-                          "fullName": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["id", "fullName"],
-                        "additionalProperties": false
-                      },
-                      "createdBy": {
-                        "type": "string",
-                        "format": "uuid",
-                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                      },
-                      "createdAt": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "id",
-                      "siteId",
-                      "title",
-                      "description",
-                      "status",
-                      "assignee",
-                      "createdBy",
-                      "createdAt"
-                    ],
-                    "additionalProperties": false
+                    "$ref": "#/components/schemas/Task"
                   }
                 }
               }
@@ -899,17 +1155,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -919,17 +1165,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -939,17 +1175,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -959,6 +1185,7 @@
     },
     "/tasks/my": {
       "get": {
+        "operationId": "listMyTasks",
         "summary": "Мои задачи — назначенные текущему пользователю, по всем объектам",
         "tags": ["tasks"],
         "security": [
@@ -974,63 +1201,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "format": "uuid",
-                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                      },
-                      "siteId": {
-                        "type": "string",
-                        "format": "uuid",
-                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                      },
-                      "title": {
-                        "type": "string"
-                      },
-                      "description": {
-                        "type": "string"
-                      },
-                      "status": {
-                        "type": "string",
-                        "enum": ["new", "in_progress", "review", "done", "rework"]
-                      },
-                      "assignee": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "format": "uuid",
-                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                          },
-                          "fullName": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["id", "fullName"],
-                        "additionalProperties": false
-                      },
-                      "createdBy": {
-                        "type": "string",
-                        "format": "uuid",
-                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                      },
-                      "createdAt": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "id",
-                      "siteId",
-                      "title",
-                      "description",
-                      "status",
-                      "assignee",
-                      "createdBy",
-                      "createdAt"
-                    ],
-                    "additionalProperties": false
+                    "$ref": "#/components/schemas/Task"
                   }
                 }
               }
@@ -1041,17 +1212,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1061,17 +1222,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1081,17 +1232,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1101,6 +1242,7 @@
     },
     "/tasks/{id}": {
       "get": {
+        "operationId": "getTask",
         "summary": "Карточка задачи: данные, доступные действия и история",
         "tags": ["tasks"],
         "parameters": [
@@ -1126,134 +1268,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "siteId": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "title": {
-                      "type": "string"
-                    },
-                    "description": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "type": "string",
-                      "enum": ["new", "in_progress", "review", "done", "rework"]
-                    },
-                    "assignee": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string",
-                          "format": "uuid",
-                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                        },
-                        "fullName": {
-                          "type": "string"
-                        }
-                      },
-                      "required": ["id", "fullName"],
-                      "additionalProperties": false
-                    },
-                    "createdBy": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "createdAt": {
-                      "type": "string"
-                    },
-                    "availableActions": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "toStatus": {
-                            "type": "string",
-                            "enum": ["new", "in_progress", "review", "done", "rework"]
-                          },
-                          "requiresComment": {
-                            "type": "boolean"
-                          }
-                        },
-                        "required": ["toStatus", "requiresComment"],
-                        "additionalProperties": false
-                      }
-                    },
-                    "history": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "format": "uuid",
-                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                          },
-                          "fromStatus": {
-                            "type": "string",
-                            "enum": ["new", "in_progress", "review", "done", "rework"]
-                          },
-                          "toStatus": {
-                            "type": "string",
-                            "enum": ["new", "in_progress", "review", "done", "rework"]
-                          },
-                          "changedBy": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "string",
-                                "format": "uuid",
-                                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                              },
-                              "fullName": {
-                                "type": "string"
-                              }
-                            },
-                            "required": ["id", "fullName"],
-                            "additionalProperties": false
-                          },
-                          "comment": {
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "createdAt": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "fromStatus",
-                          "toStatus",
-                          "changedBy",
-                          "comment",
-                          "createdAt"
-                        ],
-                        "additionalProperties": false
-                      }
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "siteId",
-                    "title",
-                    "description",
-                    "status",
-                    "assignee",
-                    "createdBy",
-                    "createdAt",
-                    "availableActions",
-                    "history"
-                  ],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/TaskCard"
                 }
               }
             }
@@ -1263,17 +1278,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1283,17 +1288,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1303,17 +1298,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1323,17 +1308,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1341,6 +1316,7 @@
         }
       },
       "patch": {
+        "operationId": "updateTask",
         "summary": "Изменить название, описание или исполнителя (постановщик)",
         "tags": ["tasks"],
         "requestBody": {
@@ -1348,21 +1324,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "title": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "description": {
-                    "type": "string"
-                  },
-                  "assigneeId": {
-                    "type": "string",
-                    "format": "uuid",
-                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                  }
-                }
+                "$ref": "#/components/schemas/UpdateTaskBodyInput"
               }
             }
           }
@@ -1390,134 +1352,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "siteId": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "title": {
-                      "type": "string"
-                    },
-                    "description": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "type": "string",
-                      "enum": ["new", "in_progress", "review", "done", "rework"]
-                    },
-                    "assignee": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string",
-                          "format": "uuid",
-                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                        },
-                        "fullName": {
-                          "type": "string"
-                        }
-                      },
-                      "required": ["id", "fullName"],
-                      "additionalProperties": false
-                    },
-                    "createdBy": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "createdAt": {
-                      "type": "string"
-                    },
-                    "availableActions": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "toStatus": {
-                            "type": "string",
-                            "enum": ["new", "in_progress", "review", "done", "rework"]
-                          },
-                          "requiresComment": {
-                            "type": "boolean"
-                          }
-                        },
-                        "required": ["toStatus", "requiresComment"],
-                        "additionalProperties": false
-                      }
-                    },
-                    "history": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "format": "uuid",
-                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                          },
-                          "fromStatus": {
-                            "type": "string",
-                            "enum": ["new", "in_progress", "review", "done", "rework"]
-                          },
-                          "toStatus": {
-                            "type": "string",
-                            "enum": ["new", "in_progress", "review", "done", "rework"]
-                          },
-                          "changedBy": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "string",
-                                "format": "uuid",
-                                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                              },
-                              "fullName": {
-                                "type": "string"
-                              }
-                            },
-                            "required": ["id", "fullName"],
-                            "additionalProperties": false
-                          },
-                          "comment": {
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "createdAt": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "fromStatus",
-                          "toStatus",
-                          "changedBy",
-                          "comment",
-                          "createdAt"
-                        ],
-                        "additionalProperties": false
-                      }
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "siteId",
-                    "title",
-                    "description",
-                    "status",
-                    "assignee",
-                    "createdBy",
-                    "createdAt",
-                    "availableActions",
-                    "history"
-                  ],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/TaskCard"
                 }
               }
             }
@@ -1527,17 +1362,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1547,17 +1372,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1567,17 +1382,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1587,17 +1392,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1607,17 +1402,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1627,17 +1412,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1645,6 +1420,7 @@
         }
       },
       "delete": {
+        "operationId": "deleteTask",
         "summary": "Удалить задачу вместе с историей (постановщик)",
         "tags": ["tasks"],
         "parameters": [
@@ -1682,17 +1458,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1702,17 +1468,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1722,17 +1478,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1742,17 +1488,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1762,6 +1498,7 @@
     },
     "/tasks": {
       "post": {
+        "operationId": "createTask",
         "summary": "Создать задачу со статусом «Новая» (постановщик)",
         "tags": ["tasks"],
         "requestBody": {
@@ -1769,28 +1506,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "siteId": {
-                    "type": "string",
-                    "format": "uuid",
-                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                  },
-                  "title": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "description": {
-                    "default": "",
-                    "type": "string"
-                  },
-                  "assigneeId": {
-                    "type": "string",
-                    "format": "uuid",
-                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                  }
-                },
-                "required": ["siteId", "title", "assigneeId"]
+                "$ref": "#/components/schemas/CreateTaskBodyInput"
               }
             }
           }
@@ -1806,134 +1522,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "siteId": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "title": {
-                      "type": "string"
-                    },
-                    "description": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "type": "string",
-                      "enum": ["new", "in_progress", "review", "done", "rework"]
-                    },
-                    "assignee": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string",
-                          "format": "uuid",
-                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                        },
-                        "fullName": {
-                          "type": "string"
-                        }
-                      },
-                      "required": ["id", "fullName"],
-                      "additionalProperties": false
-                    },
-                    "createdBy": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "createdAt": {
-                      "type": "string"
-                    },
-                    "availableActions": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "toStatus": {
-                            "type": "string",
-                            "enum": ["new", "in_progress", "review", "done", "rework"]
-                          },
-                          "requiresComment": {
-                            "type": "boolean"
-                          }
-                        },
-                        "required": ["toStatus", "requiresComment"],
-                        "additionalProperties": false
-                      }
-                    },
-                    "history": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "format": "uuid",
-                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                          },
-                          "fromStatus": {
-                            "type": "string",
-                            "enum": ["new", "in_progress", "review", "done", "rework"]
-                          },
-                          "toStatus": {
-                            "type": "string",
-                            "enum": ["new", "in_progress", "review", "done", "rework"]
-                          },
-                          "changedBy": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "string",
-                                "format": "uuid",
-                                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                              },
-                              "fullName": {
-                                "type": "string"
-                              }
-                            },
-                            "required": ["id", "fullName"],
-                            "additionalProperties": false
-                          },
-                          "comment": {
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "createdAt": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "fromStatus",
-                          "toStatus",
-                          "changedBy",
-                          "comment",
-                          "createdAt"
-                        ],
-                        "additionalProperties": false
-                      }
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "siteId",
-                    "title",
-                    "description",
-                    "status",
-                    "assignee",
-                    "createdBy",
-                    "createdAt",
-                    "availableActions",
-                    "history"
-                  ],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/TaskCard"
                 }
               }
             }
@@ -1943,17 +1532,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1963,17 +1542,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1983,17 +1552,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -2003,17 +1562,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -2023,17 +1572,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -2043,6 +1582,7 @@
     },
     "/tasks/{id}/status": {
       "post": {
+        "operationId": "changeTaskStatus",
         "summary": "Сменить статус задачи (правила проверяет база данных)",
         "tags": ["tasks"],
         "requestBody": {
@@ -2050,18 +1590,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "toStatus": {
-                    "type": "string",
-                    "enum": ["new", "in_progress", "review", "done", "rework"]
-                  },
-                  "comment": {
-                    "nullable": true,
-                    "type": "string"
-                  }
-                },
-                "required": ["toStatus"]
+                "$ref": "#/components/schemas/ChangeStatusBodyInput"
               }
             }
           }
@@ -2089,134 +1618,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "siteId": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "title": {
-                      "type": "string"
-                    },
-                    "description": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "type": "string",
-                      "enum": ["new", "in_progress", "review", "done", "rework"]
-                    },
-                    "assignee": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string",
-                          "format": "uuid",
-                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                        },
-                        "fullName": {
-                          "type": "string"
-                        }
-                      },
-                      "required": ["id", "fullName"],
-                      "additionalProperties": false
-                    },
-                    "createdBy": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "createdAt": {
-                      "type": "string"
-                    },
-                    "availableActions": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "toStatus": {
-                            "type": "string",
-                            "enum": ["new", "in_progress", "review", "done", "rework"]
-                          },
-                          "requiresComment": {
-                            "type": "boolean"
-                          }
-                        },
-                        "required": ["toStatus", "requiresComment"],
-                        "additionalProperties": false
-                      }
-                    },
-                    "history": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "format": "uuid",
-                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                          },
-                          "fromStatus": {
-                            "type": "string",
-                            "enum": ["new", "in_progress", "review", "done", "rework"]
-                          },
-                          "toStatus": {
-                            "type": "string",
-                            "enum": ["new", "in_progress", "review", "done", "rework"]
-                          },
-                          "changedBy": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "string",
-                                "format": "uuid",
-                                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                              },
-                              "fullName": {
-                                "type": "string"
-                              }
-                            },
-                            "required": ["id", "fullName"],
-                            "additionalProperties": false
-                          },
-                          "comment": {
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "createdAt": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "fromStatus",
-                          "toStatus",
-                          "changedBy",
-                          "comment",
-                          "createdAt"
-                        ],
-                        "additionalProperties": false
-                      }
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "siteId",
-                    "title",
-                    "description",
-                    "status",
-                    "assignee",
-                    "createdBy",
-                    "createdAt",
-                    "availableActions",
-                    "history"
-                  ],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/TaskCard"
                 }
               }
             }
@@ -2226,17 +1628,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -2246,17 +1638,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -2266,17 +1648,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -2286,17 +1658,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -2306,17 +1668,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -2326,17 +1678,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["code", "message"],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }

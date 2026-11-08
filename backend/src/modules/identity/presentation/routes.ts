@@ -14,6 +14,7 @@ export async function identityRoutes(app: FastifyInstance) {
     {
       schema: {
         tags: ['identity'],
+        operationId: 'getMe',
         summary: 'Текущий пользователь и его роль',
         security: [{ bearerAuth: [] }],
         response: { 200: userSchema, 401: errorResponseSchema },
@@ -27,6 +28,7 @@ export async function identityRoutes(app: FastifyInstance) {
     {
       schema: {
         tags: ['identity'],
+        operationId: 'listExecutors',
         summary: 'Исполнители, которых можно назначить на задачу',
         security: [{ bearerAuth: [] }],
         response: { 200: z.array(userSchema), 401: errorResponseSchema },

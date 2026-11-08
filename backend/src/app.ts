@@ -3,6 +3,7 @@ import swagger from '@fastify/swagger';
 import Fastify from 'fastify';
 import {
   jsonSchemaTransform,
+  jsonSchemaTransformObject,
   serializerCompiler,
   validatorCompiler,
   type ZodTypeProvider,
@@ -35,11 +36,17 @@ export async function buildApp(config: Config) {
       },
     },
     transform: jsonSchemaTransform,
+    transformObject: jsonSchemaTransformObject,
   });
 
   app.get(
     '/health',
-    { schema: { response: { 200: z.object({ status: z.literal('ok') }) } } },
+    {
+      schema: {
+        operationId: 'getHealth',
+        response: { 200: z.object({ status: z.literal('ok') }) },
+      },
+    },
     async () => ({ status: 'ok' as const }),
   );
 

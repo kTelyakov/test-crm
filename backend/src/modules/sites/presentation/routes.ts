@@ -18,6 +18,7 @@ export async function sitesRoutes(app: FastifyInstance) {
     {
       schema: {
         ...secured,
+        operationId: 'listSites',
         summary: 'Список объектов (исполнитель видит только свои)',
         response: { 200: z.array(siteSchema), ...errors },
       },
@@ -30,6 +31,7 @@ export async function sitesRoutes(app: FastifyInstance) {
     {
       schema: {
         ...secured,
+        operationId: 'getSite',
         summary: 'Карточка объекта',
         params: siteIdParamsSchema,
         response: { 200: siteSchema, 404: errorResponseSchema, ...errors },
@@ -43,6 +45,7 @@ export async function sitesRoutes(app: FastifyInstance) {
     {
       schema: {
         ...secured,
+        operationId: 'createSite',
         summary: 'Создать объект (постановщик)',
         body: createSiteBodySchema,
         response: { 201: siteSchema, ...errors },
@@ -59,6 +62,7 @@ export async function sitesRoutes(app: FastifyInstance) {
     {
       schema: {
         ...secured,
+        operationId: 'updateSite',
         summary: 'Изменить объект (постановщик)',
         params: siteIdParamsSchema,
         body: updateSiteBodySchema,
@@ -73,6 +77,7 @@ export async function sitesRoutes(app: FastifyInstance) {
     {
       schema: {
         ...secured,
+        operationId: 'deleteSite',
         summary: 'Удалить объект без задач (постановщик)',
         params: siteIdParamsSchema,
         response: {

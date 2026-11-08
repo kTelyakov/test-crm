@@ -44,6 +44,7 @@ export async function tasksRoutes(app: FastifyInstance) {
     {
       schema: {
         ...secured,
+        operationId: 'listSiteTasks',
         summary: 'Задачи объекта (исполнитель видит только свои)',
         params: siteIdParamsSchema,
         response: { 200: z.array(taskSchema), ...errors },
@@ -60,6 +61,7 @@ export async function tasksRoutes(app: FastifyInstance) {
     {
       schema: {
         ...secured,
+        operationId: 'listMyTasks',
         summary: 'Мои задачи — назначенные текущему пользователю, по всем объектам',
         response: { 200: z.array(taskSchema), ...errors },
       },
@@ -75,6 +77,7 @@ export async function tasksRoutes(app: FastifyInstance) {
     {
       schema: {
         ...secured,
+        operationId: 'getTask',
         summary: 'Карточка задачи: данные, доступные действия и история',
         params: taskIdParamsSchema,
         response: { 200: taskCardSchema, ...notFound, ...errors },
@@ -91,6 +94,7 @@ export async function tasksRoutes(app: FastifyInstance) {
     {
       schema: {
         ...secured,
+        operationId: 'createTask',
         summary: 'Создать задачу со статусом «Новая» (постановщик)',
         body: createTaskBodySchema,
         response: { 201: taskCardSchema, 422: errorResponseSchema, ...notFound, ...errors },
@@ -108,6 +112,7 @@ export async function tasksRoutes(app: FastifyInstance) {
     {
       schema: {
         ...secured,
+        operationId: 'updateTask',
         summary: 'Изменить название, описание или исполнителя (постановщик)',
         params: taskIdParamsSchema,
         body: updateTaskBodySchema,
@@ -136,6 +141,7 @@ export async function tasksRoutes(app: FastifyInstance) {
     {
       schema: {
         ...secured,
+        operationId: 'deleteTask',
         summary: 'Удалить задачу вместе с историей (постановщик)',
         params: taskIdParamsSchema,
         response: { 204: z.null(), ...notFound, ...errors },
@@ -153,6 +159,7 @@ export async function tasksRoutes(app: FastifyInstance) {
     {
       schema: {
         ...secured,
+        operationId: 'changeTaskStatus',
         summary: 'Сменить статус задачи (правила проверяет база данных)',
         params: taskIdParamsSchema,
         body: changeStatusBodySchema,
