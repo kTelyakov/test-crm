@@ -17,3 +17,12 @@ export const STATUS_TONE: Record<TaskStatus, StatusTone> = {
   done: 'success',
   rework: 'danger',
 };
+
+/** Подписи кнопок действий; действие определяется статусом, в который переводится задача. */
+export const ACTION_LABEL: Record<TaskStatus, string> = {
+  new: 'Вернуть в «Новая»',
+  in_progress: 'Взять в работу',
+  review: 'Отправить на проверку',
+  done: 'Принять',
+  rework: 'Вернуть на доработку',
+};

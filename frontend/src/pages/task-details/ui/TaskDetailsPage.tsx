@@ -2,8 +2,10 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { TaskStatusBadge } from '@/entities/task';
 import { useIsManager } from '@/entities/user';
 import { DeleteTaskButton } from '@/features/task-delete';
+import { TaskStatusActions } from '@/features/task-change-status';
 import { EditTaskButton } from '@/features/task-form';
 import { useGetTask } from '@/shared/api';
+import { TaskHistory } from '@/widgets/task-history';
 
 export function TaskDetailsPage() {
   const { taskId = '' } = useParams();
@@ -33,12 +35,17 @@ export function TaskDetailsPage() {
         <TaskStatusBadge status={task.status} />
       </div>
       <p className="whitespace-pre-wrap">{task.description || 'Описание не заполнено'}</p>
+      <TaskStatusActions task={task} />
       {isManager && (
         <div className="flex gap-2">
           <EditTaskButton task={task} />
           <DeleteTaskButton task={task} onDeleted={() => navigate(`/sites/${task.siteId}`)} />
         </div>
       )}
+      <div className="space-y-2">
+        <h2 className="font-medium">История</h2>
+        <TaskHistory entries={task.history} />
+      </div>
     </section>
   );
 }
