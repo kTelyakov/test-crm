@@ -10,6 +10,7 @@ import {
 import { z } from 'zod';
 import { authenticate } from './modules/identity/presentation/authenticate';
 import { identityRoutes } from './modules/identity/presentation/routes';
+import { sitesRoutes } from './modules/sites/presentation/routes';
 import type { Session } from './modules/identity/presentation/session';
 import type { Config } from './shared/config';
 import { errorHandler } from './shared/error-handler';
@@ -46,6 +47,7 @@ export async function buildApp(config: Config) {
     protectedApp.decorateRequest('session', null as unknown as Session);
     protectedApp.addHook('onRequest', authenticate(config));
     await protectedApp.register(identityRoutes);
+    await protectedApp.register(sitesRoutes);
   });
 
   return app;
