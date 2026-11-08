@@ -29,7 +29,7 @@
 
 ## 5. Фронтенд (FSD)
 
-- [ ] 5.1 Каркас Vite + React + TS (strict), Tailwind и shadcn/ui, FSD-слои, React Router, TanStack Query, Zustand (стор сессии), React Hook Form + Zod, Steiger; проверка: приложение запускается, `lint` и Steiger без нарушений
+- [x] 5.1 Каркас Vite + React + TS (strict), Tailwind и shadcn/ui, FSD-слои, React Router, TanStack Query, Zustand (стор сессии), React Hook Form + Zod, Steiger; проверка: приложение запускается, `lint` и Steiger без нарушений
 - [ ] 5.2 `shared`: настроить Orval и сгенерировать API-клиент в `shared/api/generated` из `backend/openapi.json`, fetch-мутатор с токеном, ui-kit, конфиг; `entities`: user, site, task, task-history на сгенерированных типах; проверка: `api:generate` не оставляет diff, `tsc` без ошибок
 - [ ] 5.3 Вход (`features/auth-login`, `pages/login`), guards по роли и перенаправление неавторизованных; проверка: Playwright UI-тесты сценариев спека `auth` (вход, ошибка, перенаправление)
 - [ ] 5.4 Список объектов и карточка объекта со списком задач; проверка: Playwright UI-тесты видимости из спека `sites` для обеих ролей
