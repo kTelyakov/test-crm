@@ -18,7 +18,7 @@
 | `backend/`  | тонкий API на Fastify по DDD (модули `identity`, `sites`, `tasks`)                               |
 | `frontend/` | интерфейс на React по FSD                                                                        |
 | `e2e/`      | тесты Playwright: UI, API бэкенда и прямые запросы к Supabase                                    |
-| `openspec/` | спецификации и план работ (OpenSpec): `openspec/changes/mini-crm-mvp/`                           |
+| `openspec/` | спецификации и план работ (OpenSpec): `openspec/changes/archive/2026-11-08-mini-crm-mvp/`        |
 
 ## Архитектура
 
@@ -67,7 +67,7 @@ pnpm check        # линтер, формат, типы, границы FSD, un
 pnpm check:secrets  # нет ли ключей в репозитории и в сборке фронтенда (после pnpm --filter @test-crm/frontend build)
 ```
 
-`pnpm test:e2e` сам поднимает бэкенд (порт 3100) и фронтенд (порт 5173). UI-тесты идут в установленном Google Chrome (`playwright install chrome`, если его нет). Тесты названы по сценариям из `openspec/changes/mini-crm-mvp/specs/`.
+`pnpm test:e2e` сам поднимает бэкенд (порт 3100) и фронтенд (порт 5173). UI-тесты идут в установленном Google Chrome (`playwright install chrome`, если его нет). Тесты названы по сценариям из `openspec/specs/`.
 
 Сценарии «в обход интерфейса» ходят в Supabase напрямую с токеном пользователя: чужие задачи, прямое изменение статуса, запрещённый переход, подделка истории, регистрация и смена роли.
 
