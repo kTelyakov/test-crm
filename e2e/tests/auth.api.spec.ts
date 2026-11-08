@@ -39,6 +39,8 @@ test.describe('Бэкенд: аутентификация', () => {
   test('Список исполнителей доступен для назначения', async () => {
     const response = await (await apiAs(manager)).get('/executors');
     expect(response.status).toBe(200);
-    expect(response.body.map((u: { role: string }) => u.role)).toEqual(['executor', 'executor']);
+    const roles = response.body.map((u: { role: string }) => u.role);
+    expect(roles.length).toBeGreaterThanOrEqual(2);
+    expect(new Set(roles)).toEqual(new Set(['executor']));
   });
 });

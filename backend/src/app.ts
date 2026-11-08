@@ -11,6 +11,7 @@ import { z } from 'zod';
 import { authenticate } from './modules/identity/presentation/authenticate';
 import { identityRoutes } from './modules/identity/presentation/routes';
 import { sitesRoutes } from './modules/sites/presentation/routes';
+import { tasksRoutes } from './modules/tasks/presentation/routes';
 import type { Session } from './modules/identity/presentation/session';
 import type { Config } from './shared/config';
 import { errorHandler } from './shared/error-handler';
@@ -48,6 +49,7 @@ export async function buildApp(config: Config) {
     protectedApp.addHook('onRequest', authenticate(config));
     await protectedApp.register(identityRoutes);
     await protectedApp.register(sitesRoutes);
+    await protectedApp.register(tasksRoutes);
   });
 
   return app;
