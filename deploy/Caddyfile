@@ -1,0 +1,12 @@
+# SITE_HOST и API_HOST задаются в deploy/.env (например 203.0.113.10.sslip.io)
+{$SITE_HOST} {
+	root * /srv
+	encode zstd gzip
+	try_files {path} /index.html
+	file_server
+}
+
+{$API_HOST} {
+	encode zstd gzip
+	reverse_proxy backend:3000
+}
